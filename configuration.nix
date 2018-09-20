@@ -43,13 +43,16 @@
   environment.etc."inputrc".text = ''
     set enable-keypad on
   '';
+
+  environment.interactiveShellInit = ''
+    alias ls='ls --color'
+  '';
+
   environment.systemPackages = with pkgs; [
     git
     wget
-    vim
     curl
     htop
-    manpages
     psmisc
 
     acpi
@@ -68,15 +71,12 @@
     scrot
     feh
     imagemagick
-    ranger
-    zathura
     tint2
     paper-icon-theme
     obconf
     lxappearance
     networkmanagerapplet
 
-    w3m
     udiskie
     tmux
     neofetch
@@ -87,12 +87,10 @@
     lm_sensors
     adapta-gtk-theme
     clipit
-
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
-  # programs.bash.enableCompletion = true;
   # programs.mtr.enable = true;
   # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
 
@@ -114,7 +112,7 @@
   sound.enable = true;
   hardware = {
       pulseaudio = {
-	      enable = true;
+	    enable = true;
         #package = pkgs.pulseaudioFull;
         tcp.enable = true;
         tcp.anonymousClients.allowedIpRanges = [ "127.0.0.1" ];
@@ -134,8 +132,6 @@
   
   systemd.services.systemd-udev-settle.serviceConfig.ExecStart = ["" "${pkgs.coreutils}/bin/true"];
 
-  # Enable the KDE Desktop Environment.
-  # services.xserver.displayManager.sddm.enable = true;
   services = {
       # Enable the X11 windowing system.
     xserver = {
@@ -159,7 +155,6 @@
         };
     };
 
-
     compton = {
 	    enable = true;
       backend = "glx";
@@ -177,7 +172,7 @@
       longitude = "-75.7";
       temperature = {
 	      day = 6500;
-        night = 5000;
+        night = 4750;
       };
     };
       
@@ -210,11 +205,16 @@
   };
   networking.networkmanager.enable = true;
 
+
+  # Enable virtualbox
+  virtualisation.virtualbox.host.enable = true;
+  virtualisation.virtualbox.guest.enable = true;
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.extraUsers.ciguatera = {
     isNormalUser = true;
     home = "/home/ciguatera";
-    extraGroups = ["wheel" "networkmanager" "audio" "video"];
+    extraGroups = ["wheel" "networkmanager" "audio" "video" "vboxuser"];
     uid = 1000;
   };
 
